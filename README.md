@@ -1,9 +1,13 @@
 # FortiGate FCP (NSE 4) Labs
 
+Hands-on labs and notes from my preparation for the **Fortinet Certified Professional – FortiGate Administrator (FortiOS 7.6)** exam, formerly known as **NSE 4**.
+
 Lab environment built in EVE-NG, based on Ahmad Ali's Udemy course *Fortinet NSE 4 – FortiOS 7.6 Administrator Training*, which is split into two parts:
 
 - [Part 1 of 2](https://www.udemy.com/course/fortinet-nse-4-fortios-76-administrator-training-part-12/) – in progress
-- Part 2 of 2 – planned
+- [Part 2 of 2](https://www.udemy.com/course/fortinet-nse-4-fortios-76-administrator-training-part-22/) – planned
+
+> **Note:** The lab runs **FortiOS 7.0.9** (evaluation VM, as suggested by the instructor) rather than 7.6. Concepts are the same, with minor GUI differences.
 
 This repo contains my own configurations, verification outputs, and troubleshooting notes.
 
