@@ -10,6 +10,7 @@ This repo contains my own configurations, verification outputs, and troubleshoot
 ## Topology
 
 ![Lab topology](topology/topology.png)
+*Some later labs modify this topology; those changes are shown in the relevant section folders.*
 
 ## IP Addressing
 
