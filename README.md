@@ -62,3 +62,7 @@ Course: [Part 2 of 2](https://www.udemy.com/course/fortinet-nse-4-fortios-76-adm
 - [ ] DHCP
 - [ ] Fundamental Maintenance
 - [ ] Diagnostics & Troubleshooting
+- [ ] Logging & Monitoring
+- [ ] High Availability
+- [ ] FortiSASE
+- [ ] FortiGate in the Cloud
