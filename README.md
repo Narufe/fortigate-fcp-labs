@@ -1,8 +1,11 @@
 # FortiGate FCP (NSE 4) Labs
 
-Hands-on labs and notes from my preparation for the **Fortinet Certified Professional – FortiGate Administrator (FortiOS 7.6)** exam, formerly known as **NSE 4**.
+Lab environment built in EVE-NG, based on Ahmad Ali's Udemy course *Fortinet NSE 4 – FortiOS 7.6 Administrator Training*, which is split into two parts:
 
-Lab environment built in EVE-NG, based on the Udemy course [Fortinet NSE 4 – FortiOS 7.6 Administrator Training](https://www.udemy.com/course/fortinet-nse-4-fortios-76-administrator-training-part-12/) by Ahmad Ali. This repo contains my own configurations, verification outputs, and troubleshooting notes.
+- [Part 1 of 2](https://www.udemy.com/course/fortinet-nse-4-fortios-76-administrator-training-part-12/) – in progress
+- Part 2 of 2 – planned
+
+This repo contains my own configurations, verification outputs, and troubleshooting notes.
 
 ## Topology
 
@@ -38,6 +41,7 @@ Lab environment built in EVE-NG, based on the Udemy course [Fortinet NSE 4 – F
 
 ## Progress
 
+### Part 1
 - [x] Lab setup (EVE-NG)
 - [x] [Section 3 – System & Interface Configuration](03-system-and-interfaces/)
 - [ ] Section 4 – Routing & ECMP
@@ -45,3 +49,16 @@ Lab environment built in EVE-NG, based on the Udemy course [Fortinet NSE 4 – F
 - [ ] Section 6 – NAT
 - [ ] Section 7 – Firewall Policies
 - [ ] Section 8 – Certificate Operations
+
+### Part 2 (planned)
+Course: [Part 2 of 2](https://www.udemy.com/course/fortinet-nse-4-fortios-76-administrator-training-part-22/)
+
+- [ ] Firewall Authentication
+- [ ] Fortinet Single Sign-On (FSSO)
+- [ ] Basic Administration
+- [ ] FW2 Setup
+- [ ] SSL & IPsec VPN
+- [ ] SD-WAN
+- [ ] DHCP
+- [ ] Fundamental Maintenance
+- [ ] Diagnostics & Troubleshooting
