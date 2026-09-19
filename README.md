@@ -49,7 +49,7 @@ This repo contains my own configurations, verification outputs, and troubleshoot
 ### Part 1
 - [x] Lab setup (EVE-NG)
 - [x] [Section 3 – System & Interface Configuration](03-system-and-interfaces/)
-- [ ] Section 4 – Routing & ECMP
+- [ ] [Section 4 – Routing & ECMP](04-routing-and-ecmp/) (in progress)
 - [ ] Section 5 – VLANs & Zones
 - [ ] Section 6 – NAT
 - [ ] Section 7 – Firewall Policies
