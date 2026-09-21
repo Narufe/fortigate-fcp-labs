@@ -9,6 +9,7 @@ Static routing on FortiGate: administrative distance, route priority and metric,
 - [Lab 1 – Static Routing](#lab-1--static-routing)
 - [Lab 2 – Primary & Backup Routes](#lab-2--primary--backup-routes)
 - [Lab 3 – ECMP (Equal-Cost Multi-Path)](#lab-3--ecmp-equal-cost-multi-path)
+- [Lab 4 – ECMP Load-Balancing Methods](#lab-4--ecmp-load-balancing-methods)
 
 ---
 
@@ -175,6 +176,89 @@ Forward Traffic filtered on source `10.0.1.1` showed PC1's sessions split across
 - The other modes are **weight-based** (uses route weights) and **usage-based** (fills one link up to a spillover threshold before using the next).
 - Load balancing is **per session**, not per packet: the continuous ping stayed on WAN-2 until that link went down.
 - If one ECMP member fails, its route goes inactive and traffic moves to the remaining link automatically.
+
+---
+
+### Lab 4 – ECMP Load-Balancing Methods
+
+Testing the other two ECMP modes: **weight-based** and **usage-based** (spillover). Both default routes stay at distance 10, priority 1.
+
+#### Clearing sessions between tests
+
+ECMP decisions are made per session, and existing sessions keep their path. So after each mode change I cleared the session table so new traffic would follow the new method:
+
+```
+FW1 # get system session list
+PROTO   EXPIRE SOURCE           SOURCE-NAT        DESTINATION        DESTINATION-NAT
+udp     60     10.0.1.3:123     192.168.1.1:5240  91.189.91.157:123  -
+tcp     3563   10.0.1.1:54980   192.168.1.1:54980 4.213.25.242:443   -
+udp     157    10.0.1.2:123     192.168.2.1:5240  185.125.190.57:123 -
+...
+
+FW1 # diagnose sys session clear
+```
+
+#### Weight-based
+
+```
+config system settings
+    set v4-ecmp-mode weight-based
+end
+config router static
+    edit 1
+        set weight 10        # port1 / WAN-1
+    next
+    edit 2
+        set weight 5         # port2 / WAN-2
+    next
+end
+```
+
+Route weight defaults to 0 (seen with `show full-configuration` under `config router static`).
+
+**Result:** with a 10:5 ratio, roughly two thirds of new sessions should use WAN-1. `tracert` from PC1 to different destinations went mostly via `192.168.1.254` (WAN-1), with some via `192.168.2.254` (WAN-2), and the Forward Traffic logs for `10.0.1.1` showed the same majority on WAN-1.
+
+#### Usage-based (spillover)
+
+```
+config system settings
+    set v4-ecmp-mode usage-based
+end
+config system interface
+    edit port1
+        set spillover-threshold 5
+    next
+    edit port2
+        set spillover-threshold 10
+    next
+end
+```
+
+The threshold is set on the **interface**, in kbps. Verification:
+
+```
+FW1 # diagnose netlink dstmac list port1
+dev=port1 ... egress_overspill_threshold=625 egress_bytes=1293 ...
+
+FW1 # diagnose netlink dstmac list port2
+dev=port2 ... egress_overspill_threshold=1250 egress_bytes=2241 ...
+```
+
+The output shows the threshold in **bytes per second**: 5 kbps ÷ 8 = 625, and 10 kbps ÷ 8 = 1250. The zero values in the output are the ingress fields, which weren't configured.
+
+**Result:** I generated traffic from PC1 (browsing and downloading a large ISO). Forward Traffic showed most sessions on WAN-1, with some new sessions on WAN-2. Because spillover is per session, the long download stayed on WAN-1; only new sessions can move to WAN-2 while WAN-1 is over its threshold.
+
+Finally, I set the mode back to `source-dest-ip-based`.
+
+**Takeaways**
+
+- FortiGate has four ECMP modes: source-IP (default), source-destination IP, weight-based and usage-based.
+- **Weight-based** splits sessions in proportion to the route weights, which are set on the static routes.
+- **Usage-based** fills one link up to its spillover threshold, set on the interface in kbps, then sends new sessions to the next link.
+- `diagnose netlink dstmac list <port>` shows the spillover threshold in bytes/sec, so 5 kbps appears as 625.
+- All modes work per session, so clear sessions (`diagnose sys session clear`) when testing a mode change. In production, be careful: this drops every session on the firewall.
+- Weights and thresholds stay in the config but only take effect in their own mode.
+- CLI lesson: under `config system interface`, `edit` takes the interface **name**. `edit 2` tried to create a new interface called "2", and `end` failed with `Attribute 'vdom' MUST be set`. Static routes use numbers (`edit 1`); interfaces use names (`edit port1`). `abort` backs out of an unwanted edit.
 
 ---
 
